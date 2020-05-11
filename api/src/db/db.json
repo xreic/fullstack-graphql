@@ -3,5 +3,65 @@
     "id": "jBWMVGjm50l6LGwepDoty",
     "username": "frontendmaster"
   },
-  "pet": []
+  "pet": [
+    {
+      "id": "b3nuq830nub28t",
+      "type": "DOG",
+      "name": "Duder",
+      "createdAt": "tbu3n8tb53wau329ut39"
+    },
+    {
+      "id": "b3nuq830nub532q5b32q5bb28t",
+      "type": "CAT",
+      "name": "Guy",
+      "createdAt": "tbu3nrbag8tbu329ut39"
+    },
+    {
+      "id": "b3nb25q32qb52quq830nub28t",
+      "type": "DOG",
+      "name": "Pal",
+      "createdAt": "tbu3n8tbu329a2q36ut39"
+    },
+    {
+      "id": "b3nuqb532qb532q5830nub28t",
+      "type": "CAT",
+      "name": "Buddy",
+      "createdAt": "tbu3n8t6b32qbu329ut39"
+    },
+    {
+      "id": "3P52fP5CA7nK_b-JW1Kgw",
+      "createdAt": 1589214396312,
+      "name": "Batman",
+      "type": "DOG",
+      "user": "jBWMVGjm50l6LGwepDoty"
+    },
+    {
+      "id": "Hbe3ItBe1qpBYReoGAVpD",
+      "createdAt": 1589217837909,
+      "name": "Test #1",
+      "type": "DOG",
+      "user": "jBWMVGjm50l6LGwepDoty"
+    },
+    {
+      "id": "bq__Twci9-jcp3M7-qvlW",
+      "createdAt": 1589220660097,
+      "name": "Doggers",
+      "type": "DOG",
+      "user": "jBWMVGjm50l6LGwepDoty"
+    },
+    {
+      "id": "Z4nrqGnxbz2NKpttuC6N6",
+      "createdAt": 1589220733169,
+      "name": "Another One",
+      "type": "CAT",
+      "user": "jBWMVGjm50l6LGwepDoty"
+    },
+    {
+      "id": "txxAiz6hPPSUkvNDjXM8Z",
+      "createdAt": 1589221907958,
+      "name": "Frags Test",
+      "type": "DOG",
+      "user": "jBWMVGjm50l6LGwepDoty"
+    }
+  ]
 }

@@ -1,36 +1,90 @@
 import React, { useState } from 'react';
 import gql from 'graphql-tag';
-import PetBox from '../components/PetBox';
-import NewPet from '../components/NewPet';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import PetsList from '../components/PetsList';
+import NewPetModal from '../components/NewPetModal';
 import Loader from '../components/Loader';
 
-// Client branch init commit
+const PETS_FIELDS_FRAG = gql`
+  fragment PETS_FIELDS_FRAG on Pet {
+    id
+    name
+    type
+    img
+    vaccinated @client
+    owner {
+      id
+      age @client
+    }
+  }
+`;
+
+const ALL_PETS_QUERY = gql`
+  query ALL_PETS_QUERY {
+    pets {
+      ...PETS_FIELDS_FRAG
+    }
+  }
+  ${PETS_FIELDS_FRAG}
+`;
+
+const ADD_PET_MUTATION = gql`
+  mutation ADD_PET_MUTATION($newPet: NewPetInput!) {
+    addPet(input: $newPet) {
+      ...PETS_FIELDS_FRAG
+    }
+  }
+  ${PETS_FIELDS_FRAG}
+`;
 
 export default function Pets() {
   const [modal, setModal] = useState(false);
+  const { data, loading, error } = useQuery(ALL_PETS_QUERY);
+  const [createPet, newPet] = useMutation(ADD_PET_MUTATION, {
+    // update runs after the response from the server comes back
+    update(cache, { data: { addPet } }) {
+      const { pets } = cache.readQuery({ query: ALL_PETS_QUERY });
+      cache.writeQuery({
+        query: ALL_PETS_QUERY,
+        data: { pets: [addPet].concat(pets) }
+      });
+    }
+
+    /**
+     * optimisticResponse here:
+     * Will occur every time createPet occurs
+     * Will not have access to the input variables
+     */
+  });
 
   const onSubmit = (input) => {
     setModal(false);
+    createPet({
+      variables: { newPet: input },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addPet: {
+          id: input.name,
+          ...input,
+          img: 'https://via.placeholder/com/300',
+          __typename: 'Pet'
+        }
+      }
+    });
+
+    /**
+     * optimisticResponse here:
+     * Will occur when the component requires it
+     * Will have access to the input variables
+     */
   };
 
-  const petsList = pets.data.pets.map((pet) => (
-    <div className="col-xs-12 col-md-4 col" key={pet.id}>
-      <div className="box">
-        <PetBox pet={pet} />
-      </div>
-    </div>
-  ));
-
   if (modal) {
-    return (
-      <div className="row center-xs">
-        <div className="col-xs-8">
-          <NewPet onSubmit={onSubmit} onCancel={() => setModal(false)} />
-        </div>
-      </div>
-    );
+    return <NewPetModal onSubmit={onSubmit} onCancel={() => setModal(false)} />;
   }
+
+  if (loading) return <Loader />;
+  if (error || newPet.error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="page pets-page">
@@ -46,7 +100,7 @@ export default function Pets() {
         </div>
       </section>
       <section>
-        <div className="row">{petsList}</div>
+        <PetsList pets={data.pets} />
       </section>
     </div>
   );
